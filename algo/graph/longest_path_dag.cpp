@@ -18,7 +18,7 @@ void distUtils(int node, int d){
     dist[node] = max(d, dist[node]);
 
     for(int i=0; i<graph[node].size(); i++){
-        distUtils(graph[node][i].F, graph[node][i].S+d);
+        distUtils(graph[node][i].F, graph[node][i].S+dist[node]);
     }
 }
 
