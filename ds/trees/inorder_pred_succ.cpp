@@ -7,7 +7,11 @@ struct Node{
     Node(int x): data(x), left(NULL), right(NULL) {};
 };
 
-Node* tmp = new Node(0);
+Node* tmp;
+
+void init(){
+    tmp = NULL;
+}
 
 Node* leftMostNode(Node* root){
     while(root!=NULL && root->left!=NULL){
@@ -23,13 +27,28 @@ Node* rightMostNode(Node *root){
     return root;
 }
 
-Node* findInorder(Node* root, Node* x){
+Node* findInorderSucc(Node* root, Node* x){
     if(!root) return NULL;
-    if(root==x || (tmp=findInorder(root->left, x)) ||
-                  (tmp=findInorder(root->right, x)))
+    if(root==x || (tmp=findInorderSucc(root->left, x)) ||
+                  (tmp=findInorderSucc(root->right, x)))
     {
         if(tmp){
             if(root->left==tmp){
+                cout<<root->data<<endl;
+                return NULL;
+            }
+        }
+        return root;
+    }
+}
+
+Node* findInorderPred(Node* root, Node* x){
+    if(!root) return NULL;
+    if(root==x || (tmp=findInorderPred(root->left, x)) ||
+                  (tmp=findInorderPred(root->right,x)))
+    {
+        if(tmp){
+            if(root->right==tmp){
                 cout<<root->data<<endl;
                 return NULL;
             }
@@ -42,11 +61,23 @@ Node* inorderSuccessor(Node* root, Node* x){
     if(x->right!=NULL){
         cout<<leftMostNode(x->right)->data<<endl;
     }
-    if(x->right==NULL){
+    else if(x->right==NULL){
         Node *rightMost = rightMostNode(root);
         if(rightMost==x) cout<<"Not possible"<<endl;
         else{
-            findInorder(root, x);
+            findInorderSucc(root, x);
+        }
+    }
+}
+
+Node *inorderPredecessor(Node* root, Node *x){
+    if(x->left!=NULL){
+        cout<<rightMostNode(x->left)->data<<endl;
+    }else if(x->left==NULL){
+        Node *leftMost = leftMostNode(root);
+        if(leftMost==x) cout<<"Not possible"<<endl;
+        else{
+            findInorderPred(root, x);
         }
     }
 }
@@ -59,6 +90,14 @@ int main(){
     root->left->right = new Node(5);
     root->right->right = new Node(6);
 
+    init();
+    inorderPredecessor(root, root->right);
+    inorderPredecessor(root, root->left->left);
+    inorderPredecessor(root, root->right->right);
+
+    cout<<endl;
+
+    init();
     inorderSuccessor(root, root->right);
     inorderSuccessor(root, root->left->left);
     inorderSuccessor(root, root->right->right);
