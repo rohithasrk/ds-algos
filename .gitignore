@@ -33,3 +33,6 @@
 
 # Vim files
 *.swp
+
+# Testing codes
+test*
